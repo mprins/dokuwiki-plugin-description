@@ -1,49 +1,62 @@
 <?php
+/*
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @noinspection AutoloadingIssuesInspection
+ */
+
 /**
- * Description plugin
+ * Description plugin.
  *
  * @license    GPL 2 (http://www.gnu.org/licenses/gpl.html)
  * @author     Matthias Schulte <dokuwiki@lupo49.de>
+ * @author     Mark C. Prins <mprins@users.sf.net>
+ *
  */
 
-// must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
+use dokuwiki\Extension\SyntaxPlugin;
 
-if (!defined('DOKU_LF')) define('DOKU_LF', "\n");
-if (!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
-if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
+class syntax_plugin_description extends SyntaxPlugin
+{
 
-require_once(DOKU_PLUGIN.'syntax.php');
+    final  public function getType(): string
+    {
+        return 'substition';
+    }
 
-class syntax_plugin_description extends DokuWiki_Syntax_Plugin {
+    final public function getPType(): string
+    {
+        return 'block';
+    }
 
-    function getType() { return 'substition'; }
-    function getPType() { return 'block'; }
-    function getSort() { return 98; }
+    final  public function getSort(): int
+    {
+        return 98;
+    }
 
-    function connectTo($mode) {
+    final  public function connectTo($mode): void
+    {
         $this->Lexer->addSpecialPattern('\{\{description>.+?\}\}', $mode, 'plugin_description');
     }
 
-    function handle($match, $state, $pos, Doku_Handler $handler) {
+    final public function handle($match, $state, $pos, Doku_Handler $handler): array
+    {
         $match = substr($match, 14, -2); // strip markup
         $match = hsc($match);
-        
+
         return array($match);
-    }            
+    }
 
-    function render($mode, Doku_Renderer $renderer, $data) {
-        global $conf;
-        global $ID;       
+    final public function render($format, Doku_Renderer $renderer, $data): bool
+    {
         $description = $data[0];
-        if(empty($description)) return false;
+        if (empty($description)) {
+            return false;
+        }
 
-        if ($mode == 'metadata') {
+        if ($format === 'metadata') {
             $renderer->meta['plugin_description']['keywords'] = $description;
             return true;
         }
         return false;
     }
 }
-
-// vim:ts=4:sw=4:et: 

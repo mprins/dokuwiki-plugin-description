@@ -1,0 +1,14 @@
+name: 'Repository Maintenance'
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7 3 * * 6'
+
+jobs:
+  action:
+    name: 'Repository Maintenance'
+    uses: mprins/.github/.github/workflows/maintenance.yml@main
+    with:
+        issue-inactive-days: '90'
+        pr-inactive-days: '60'

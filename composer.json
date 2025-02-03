@@ -1,0 +1,28 @@
+{
+  "name": "mprins/dokuwiki-plugin-description",
+  "description": "description plugin for DokuWiki",
+  "homepage": "https://www.dokuwiki.org/plugin:description",
+  "minimum-stability": "stable",
+  "type": "plugin",
+  "license": "GPL-2.0-only",
+  "authors": [
+    {
+      "name": "mprins",
+      "email": "mprins@users.sf.net"
+    }
+  ],
+  "require": {
+    "php": ">=8.0"
+  },
+  "config": {
+    "platform": {
+      "php": "8.0"
+    }
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/mprins"
+    }
+  ]
+}
