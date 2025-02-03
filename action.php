@@ -35,6 +35,11 @@ class action_plugin_description extends DokuWiki_Action_Plugin {
         if(empty($source)) $source = 'abstract';
         
         if($source == KEYWORD_SOURCE_ABSTRACT) {
+            if (auth_quickaclcheck($ID) < AUTH_READ) {
+                // don't add meta header when user has no read permissions
+                return;
+            }
+
             $d = p_get_metadata($ID, 'description');
             if(empty($d)) return;
     
@@ -48,6 +53,10 @@ class action_plugin_description extends DokuWiki_Action_Plugin {
         }
 
         if($source == KEYWORD_SOURCE_SYNTAX) {
+            if (auth_quickaclcheck($ID) < AUTH_READ) {
+                // don't add meta header when user has no read permissions
+                return;
+            }
             $metadata = p_get_metadata($ID);
             $a = $metadata['plugin_description']['keywords'];
             if(empty($a)) return;
