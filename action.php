@@ -1,67 +1,86 @@
 <?php
-/**
- *  Description action plugin
- *
- *  @lastmodified 2012-07-02
- *  @license      GPL 2 (http://www.gnu.org/licenses/gpl.html)
- *  @author       Ikuo Obataya <I.Obataya@gmail.com>
- *  @author       Matthias Schulte <dokuwiki@lupo49.de>
- *  @version      2012-07-02
+/*
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @noinspection AutoloadingIssuesInspection
  */
 
-if(!defined('DOKU_INC')) die();
-if(!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
+/**
+ *  Description action plugin.
+ *
+ * @license      GPL 2 (http://www.gnu.org/licenses/gpl.html)
+ * @author       Ikuo Obataya <I.Obataya@gmail.com>
+ * @author       Matthias Schulte <dokuwiki@lupo49.de>.
+ * @author       Mark C. Prins <mprins@users.sf.net>
+ *
+ */
 
-require_once(DOKU_PLUGIN.'action.php');
+use dokuwiki\Extension\ActionPlugin;
+use dokuwiki\Extension\Event;
+use dokuwiki\Extension\EventHandler;
 
-define('KEYWORD_SOURCE_ABSTRACT', 'abstract');
-define('KEYWORD_SOURCE_GLOBAL', 'global');
-define('KEYWORD_SOURCE_SYNTAX', 'syntax');
+const KEYWORD_SOURCE_ABSTRACT = 'abstract';
+const KEYWORD_SOURCE_GLOBAL = 'global';
+const KEYWORD_SOURCE_SYNTAX = 'syntax';
 
-class action_plugin_description extends DokuWiki_Action_Plugin {
+class action_plugin_description extends ActionPlugin
+{
 
-    function register(Doku_Event_Handler $controller) {
-        $controller->register_hook('TPL_METAHEADER_OUTPUT','BEFORE',$this,'description',array());
+    final public function register(EventHandler $controller): void
+    {
+        $controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, 'description', array());
     }
 
     /**
      * Add an abstract, global value or a specified string to meta header
      */
-    function description(&$event, $param) {
-        if(empty($event->data) || empty($event->data['meta'])) return;
-        
+    final public function description(Event $event, $param): void
+    {
+        if (empty($event->data) || empty($event->data['meta'])) {
+            return;
+        }
+
         global $ID;
         $source = $this->getConf('keyword_source');
-        if(empty($source)) $source = 'abstract';
-        
-        if($source == KEYWORD_SOURCE_ABSTRACT) {
+        if (empty($source)) {
+            $source = 'abstract';
+        }
+
+        if ($source === KEYWORD_SOURCE_ABSTRACT) {
             if (auth_quickaclcheck($ID) < AUTH_READ) {
                 // don't add meta header when user has no read permissions
                 return;
             }
 
             $d = p_get_metadata($ID, 'description');
-            if(empty($d)) return;
-    
+            if (empty($d)) {
+                return;
+            }
+
             $a = str_replace("\n", " ", $d['abstract']);
-            if(empty($a)) return;
-        }
-        
-        if($source == KEYWORD_SOURCE_GLOBAL) {
-            $a = $this->getConf('global_description');
-            if(empty($a)) return;
+            if (empty($a)) {
+                return;
+            }
         }
 
-        if($source == KEYWORD_SOURCE_SYNTAX) {
+        if ($source === KEYWORD_SOURCE_GLOBAL) {
+            $a = $this->getConf('global_description');
+            if (empty($a)) {
+                return;
+            }
+        }
+
+        if ($source === KEYWORD_SOURCE_SYNTAX) {
             if (auth_quickaclcheck($ID) < AUTH_READ) {
                 // don't add meta header when user has no read permissions
                 return;
             }
             $metadata = p_get_metadata($ID);
             $a = $metadata['plugin_description']['keywords'];
-            if(empty($a)) return;
+            if (empty($a)) {
+                return;
+            }
         }
-        
+
         $m = array("name" => "description", "content" => $a);
         $event->data['meta'][] = $m;
     }
