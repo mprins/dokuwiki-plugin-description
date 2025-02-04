@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  * @noinspection AutoloadingIssuesInspection
@@ -24,10 +25,9 @@ const KEYWORD_SOURCE_SYNTAX = 'syntax';
 
 class action_plugin_description extends ActionPlugin
 {
-
     final public function register(EventHandler $controller): void
     {
-        $controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, 'description', array());
+        $controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, 'description', []);
     }
 
     /**
@@ -81,7 +81,7 @@ class action_plugin_description extends ActionPlugin
             }
         }
 
-        $m = array("name" => "description", "content" => $a);
+        $m = ["name" => "description", "content" => $a];
         $event->data['meta'][] = $m;
     }
 }
