@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  * @noinspection AutoloadingIssuesInspection
@@ -17,7 +18,6 @@ use dokuwiki\Extension\SyntaxPlugin;
 
 class syntax_plugin_description extends SyntaxPlugin
 {
-
     final  public function getType(): string
     {
         return 'substition';
@@ -43,7 +43,7 @@ class syntax_plugin_description extends SyntaxPlugin
         $match = substr($match, 14, -2); // strip markup
         $match = hsc($match);
 
-        return array($match);
+        return [$match];
     }
 
     final public function render($format, Doku_Renderer $renderer, $data): bool
