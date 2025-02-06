@@ -1,16 +1,15 @@
 <?php
-/*
- * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
- * @noinspection AutoloadingIssuesInspection
- */
 
 /**
- * General tests for the description plugin
+ * General tests for the description plugin.
  *
  * @group plugin_description
  * @group plugins
  *
  * @author Mark C. Prins <mprins@users.sf.net>
+ *
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @noinspection AutoloadingIssuesInspection
  */
 class general_plugin_description_test extends DokuWikiTest
 {

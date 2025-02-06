@@ -1,10 +1,5 @@
 <?php
 
-/*
- * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
- * @noinspection AutoloadingIssuesInspection
- */
-
 /**
  * Description plugin.
  *
@@ -12,6 +7,8 @@
  * @author     Matthias Schulte <dokuwiki@lupo49.de>
  * @author     Mark C. Prins <mprins@users.sf.net>
  *
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @noinspection AutoloadingIssuesInspection
  */
 
 use dokuwiki\Extension\SyntaxPlugin;
