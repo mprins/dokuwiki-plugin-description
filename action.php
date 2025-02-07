@@ -1,10 +1,5 @@
 <?php
 
-/*
- * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
- * @noinspection AutoloadingIssuesInspection
- */
-
 /**
  *  Description action plugin.
  *
@@ -13,6 +8,8 @@
  * @author       Matthias Schulte <dokuwiki@lupo49.de>.
  * @author       Mark C. Prins <mprins@users.sf.net>
  *
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @noinspection AutoloadingIssuesInspection
  */
 
 use dokuwiki\Extension\ActionPlugin;
@@ -33,7 +30,7 @@ class action_plugin_description extends ActionPlugin
     /**
      * Add an abstract, global value or a specified string to meta header
      */
-    final public function description(Event $event, $param): void
+    final public function description(Event $event): void
     {
         if (empty($event->data) || empty($event->data['meta'])) {
             return;
@@ -45,43 +42,42 @@ class action_plugin_description extends ActionPlugin
             $source = 'abstract';
         }
 
-        if ($source === KEYWORD_SOURCE_ABSTRACT) {
-            if (auth_quickaclcheck($ID) < AUTH_READ) {
-                // don't add meta header when user has no read permissions
-                return;
-            }
+        $metaContent = '';
+        switch ($source) {
+            case KEYWORD_SOURCE_ABSTRACT:
+                if (auth_quickaclcheck($ID) < AUTH_READ) {
+                    // don't add meta header when user has no read permissions
+                    return;
+                }
+                $d = p_get_metadata($ID, 'description');
+                if (empty($d)) {
+                    return;
+                }
+                $metaContent = str_replace("\n", " ", $d['abstract']);
+                if (empty($metaContent)) {
+                    return;
+                }
+                break;
+            case KEYWORD_SOURCE_GLOBAL:
+                $metaContent = $this->getConf('global_description');
+                if (empty($metaContent)) {
+                    return;
+                }
+                break;
+            case KEYWORD_SOURCE_SYNTAX:
+                if (auth_quickaclcheck($ID) < AUTH_READ) {
+                    // don't add meta header when user has no read permissions
+                    return;
+                }
+                $metadata = p_get_metadata($ID);
+                $metaContent = $metadata['plugin_description']['keywords'];
+                if (empty($metaContent)) {
+                    return;
+                }
+                break;
 
-            $d = p_get_metadata($ID, 'description');
-            if (empty($d)) {
-                return;
-            }
-
-            $a = str_replace("\n", " ", $d['abstract']);
-            if (empty($a)) {
-                return;
-            }
         }
 
-        if ($source === KEYWORD_SOURCE_GLOBAL) {
-            $a = $this->getConf('global_description');
-            if (empty($a)) {
-                return;
-            }
-        }
-
-        if ($source === KEYWORD_SOURCE_SYNTAX) {
-            if (auth_quickaclcheck($ID) < AUTH_READ) {
-                // don't add meta header when user has no read permissions
-                return;
-            }
-            $metadata = p_get_metadata($ID);
-            $a = $metadata['plugin_description']['keywords'];
-            if (empty($a)) {
-                return;
-            }
-        }
-
-        $m = ["name" => "description", "content" => $a];
-        $event->data['meta'][] = $m;
+        $event->data['meta'][] = ["name" => "description", "content" => $metaContent];
     }
 }

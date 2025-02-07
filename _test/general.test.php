@@ -1,16 +1,15 @@
 <?php
-/*
- * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
- * @noinspection AutoloadingIssuesInspection
- */
 
 /**
- * General tests for the description plugin
+ * General tests for the description plugin.
  *
  * @group plugin_description
  * @group plugins
  *
  * @author Mark C. Prins <mprins@users.sf.net>
+ *
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @noinspection AutoloadingIssuesInspection
  */
 class general_plugin_description_test extends DokuWikiTest
 {
@@ -20,7 +19,7 @@ class general_plugin_description_test extends DokuWikiTest
     /**
      * Simple test to make sure the plugin.info.txt is in correct format
      */
-    public function test_plugininfo(): void
+    final public function testPluginInfo(): void
     {
         $file = __DIR__ . '/../plugin.info.txt';
         $this->assertFileExists($file);
@@ -39,17 +38,28 @@ class general_plugin_description_test extends DokuWikiTest
         $this->assertRegExp('/^https?:\/\//', $info['url']);
         $this->assertTrue(mail_isvalid($info['email']));
         $this->assertRegExp('/^\d\d\d\d-\d\d-\d\d$/', $info['date']);
-        $this->assertTrue(false !== strtotime($info['date']));
+        $this->assertNotFalse(strtotime($info['date']));
     }
 
     /**
      * test if plugin is loaded.
      */
-    public function test_plugin_description_isloaded()
+    final public function testDescriptionPluginIsLoaded(): void
     {
         global $plugin_controller;
         $this->assertContains(
-            'description', $plugin_controller->getList(), "description plugin is loaded"
+            'description',
+            $plugin_controller->getList(),
+            "description plugin is loaded"
         );
+    }
+
+    /**
+     * test if plugin is loaded.
+     */
+    final public function testSyntaxLoading(): void
+    {
+        $index = plugin_load('syntax', 'description');
+        $this->assertInstanceOf(syntax_plugin_description::class, $index);
     }
 }

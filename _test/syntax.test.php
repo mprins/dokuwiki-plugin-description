@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Action tests for the description plugin.
+ * Syntax 'keyword_source' tests for the description plugin.
  *
  * @group plugin_description
  * @group plugins
@@ -11,7 +11,7 @@
  * @noinspection AutoloadingIssuesInspection
  * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  */
-class action_plugin_description_test extends DokuWikiTest
+class syntax_plugin_description_test extends DokuWikiTest
 {
     protected $pluginsEnabled = array('description');
 
@@ -28,20 +28,20 @@ class action_plugin_description_test extends DokuWikiTest
     {
         global $conf;
         parent::setUp();
-        $conf['plugin']['description']['keyword_source'] = 'abstract';
+        $conf['plugin']['description']['keyword_source'] = 'syntax';
     }
 
     /**
      * @throws Exception if anything goes wrong
      */
-    final public function testActionHeader(): void
+    final public function testHeaderFromSyntax(): void
     {
         $request = new TestRequest();
-        $response = $request->get(array('id' => 'wiki:syntax'));
+        $response = $request->get(array('id' => 'description_syntax'));
 
-        // check description meta headers
+        // check description meta headers, set from file
         $this->assertStringContainsString(
-            'DokuWiki supports some simple markup language',
+            'Place the page description here',
             $response->queryHTML('meta[name="description"]')->attr('content')
         );
     }
