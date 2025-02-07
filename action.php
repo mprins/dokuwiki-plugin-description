@@ -75,7 +75,6 @@ class action_plugin_description extends ActionPlugin
                     return;
                 }
                 break;
-
         }
 
         $event->data['meta'][] = ["name" => "description", "content" => $metaContent];
