@@ -1,7 +1,8 @@
 base   description
 author Mark C. Prins, Ikuo Obataya, Matthias Schulte
 email  mprins@users.sf.net
-date   2025-04-19
+date   2025-05-16
 name   description plugin
 desc   Add a specified string to a description meta header
 url    https://www.dokuwiki.org/plugin:description
+minphp 8.0
