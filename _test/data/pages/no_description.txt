@@ -1,0 +1,5 @@
+====== Page Without Description ======
+
+This is a test page that does not have the description syntax.
+
+It should not cause any PHP warnings when keyword_source is set to 'syntax'.

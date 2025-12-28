@@ -45,4 +45,23 @@ class syntax_plugin_description_test extends DokuWikiTest
             $response->queryHTML('meta[name="description"]')->attr('content')
         );
     }
+
+    /**
+     * Test that pages without description syntax don't cause PHP errors
+     * This tests the fix for issue #6
+     *
+     * @throws Exception if anything goes wrong
+     */
+    final public function testNoDescriptionSyntaxNoError(): void
+    {
+        $request = new TestRequest();
+        $response = $request->get(array('id' => 'no_description'));
+
+        // Page should load successfully without PHP errors
+        $this->assertNotNull($response);
+        
+        // No description meta tag should be present
+        $metaTags = $response->queryHTML('meta[name="description"]');
+        $this->assertEquals(0, $metaTags->count());
+    }
 }
