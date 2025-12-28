@@ -70,17 +70,17 @@ class action_plugin_description extends ActionPlugin
                     return;
                 }
                 $metadata = p_get_metadata($ID);
-                
+
                 // Normalize to an array
                 if (!is_array($metadata)) {
                     $metadata = [];
                 }
-                
+
                 // Safely read keywords if the structure is present and an array
                 if (isset($metadata['plugin_description']) && is_array($metadata['plugin_description'])) {
                     $metaContent = $metadata['plugin_description']['keywords'] ?? '';
                 }
-                
+
                 if (empty($metaContent)) {
                     return;
                 }
