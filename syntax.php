@@ -11,11 +11,12 @@
  * @noinspection AutoloadingIssuesInspection
  */
 
+use dokuwiki\Parsing\Handler;
 use dokuwiki\Extension\SyntaxPlugin;
 
 class syntax_plugin_description extends SyntaxPlugin
 {
-    final  public function getType(): string
+    final public function getType(): string
     {
         return 'substition';
     }
@@ -25,17 +26,17 @@ class syntax_plugin_description extends SyntaxPlugin
         return 'block';
     }
 
-    final  public function getSort(): int
+    final public function getSort(): int
     {
         return 98;
     }
 
-    final  public function connectTo($mode): void
+    final public function connectTo($mode): void
     {
         $this->Lexer->addSpecialPattern('\{\{description>.+?\}\}', $mode, 'plugin_description');
     }
 
-    final public function handle($match, $state, $pos, Doku_Handler $handler): array
+    final public function handle($match, $state, $pos, Handler $handler): array
     {
         $match = substr($match, 14, -2); // strip markup
         $match = hsc($match);
