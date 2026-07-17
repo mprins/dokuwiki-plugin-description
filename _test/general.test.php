@@ -1,5 +1,7 @@
 <?php
 
+use dokuwiki\MailUtils;
+
 /**
  * General tests for the description plugin.
  *
@@ -35,9 +37,9 @@ class general_plugin_description_test extends DokuWikiTest
         $this->assertArrayHasKey('url', $info);
 
         $this->assertEquals('description', $info['base']);
-        $this->assertRegExp('/^https?:\/\//', $info['url']);
-        $this->assertTrue(mail_isvalid($info['email']));
-        $this->assertRegExp('/^\d\d\d\d-\d\d-\d\d$/', $info['date']);
+        $this->assertMatchesRegularExpression('/^https?:\/\//', $info['url']);
+        $this->assertTrue(MailUtils::isValid($info['email']));
+        $this->assertMatchesRegularExpression('/^\d\d\d\d-\d\d-\d\d$/', $info['date']);
         $this->assertNotFalse(strtotime($info['date']));
     }
 
